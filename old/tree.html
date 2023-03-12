@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Tree</title>
+  <script src="https://unpkg.com/d3"></script>
+  <script src="tree.js"></script>
+  <style>
+    /* Add CSS styles here */
+  </style>
+</head>
+
+<body>
+  <div id="hierarchy"></div>
+
+  <script>
+    // Set up the hierarchical data
+    const data = {
+      name: 'A',
+      children: [
+        { name: 'B', children: [{ name: 'D' }, { name: 'E' }] },
+        { name: 'C', children: [{ name: 'F' }, { name: 'G' }] },
+      ],
+    };
+
+
+    
+    dx = 10
+    dy = 192
+
+    tree = d3.tree().nodeSize([dx, dy])
+    diagonal = d3.linkHorizontal().x(d => d.y).y(d => d.x)
+
+    width = dy * 6
+    margin = ({ top: 10, right: 120, bottom: 10, left: 40 })
+
+    svg = Tree(data, {
+      label: d => d.name,
+      title: (d, n) => `${n.ancestors().reverse().map(d => d.data.name).join(".")}`, // hover text
+      // link: (d, n) => `https://github.com/prefuse/Flare/${n.children ? "tree" : "blob"}/master/flare/src/${n.ancestors().reverse().map(d => d.data.name).join("/")}${n.children ? "" : ".as"}`,
+      width: 1152
+    })
+
+
+
+  </script>
+</body>
+
+</html>

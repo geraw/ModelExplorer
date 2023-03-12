@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Hierarchical Visualization with D3.js</title>
+    <script src="https://unpkg.com/d3"></script>
+    <style>
+      /* Add CSS styles here */
+    </style>
+  </head>
+  <body>
+    <div id="hierarchy"></div>
+
+    <script>
+      // Set up the hierarchical data
+      const data = {
+        name: 'A',
+        children: [
+          { name: 'B', children: [{ name: 'D' }, { name: 'E' }] },
+          { name: 'C', children: [{ name: 'F' }, { name: 'G' }] },
+        ],
+      };
+
+      // Create a hierarchical layout from the input data
+      const root = d3.hierarchy(data);
+
+      // Set the layout options
+      const treeLayout = d3.tree().size([400, 200]);
+
+      // Create a tree layout from the hierarchical layout
+      const treeData = treeLayout(root);
+
+      // Render the graph using D3.js
+      const svg = d3.select('#hierarchy')
+        .append('svg')
+        .attr('width', 400)
+        .attr('height', 200);
+
+      // Render the edges
+      svg
+        .selectAll('path')
+        .data(treeData.links())
+        .enter()
+        .append('path')
+        .attr('d', d3.linkHorizontal()
+          .x(d => d.y)
+          .y(d => d.x))
+        .attr('stroke', 'black')
+        .attr('fill', 'none');
+
+      // Render the nodes
+      svg
+        .selectAll('circle')
+        .data(treeData.descendants())
+        .enter()
+        .append('circle')
+        .attr('cx', d => d.y)
+        .attr('cy', d => d.x)
+        .attr('r', 10)
+        .attr('stroke', 'black')
+        .attr('fill', 'white');
+
+      // Render the labels
+      svg
+        .selectAll('text')
+        .data(treeData.descendants())
+        .enter()
+        .append('text')
+        .text(d => d.data.name)
+        .attr('x', d => d.y + 15)
+        .attr('y', d => d.x)
+        .attr('text-anchor', 'start')
+        .attr('alignment-baseline', 'middle');
+    </script>
+  </body>
+</html>

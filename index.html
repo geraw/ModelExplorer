@@ -18,7 +18,7 @@
         var graphviz = d3.select("#graph").graphviz();
 
         function render() {
-            console.log('DOT source =', dotSrc);
+            //console.log('DOT source =', dotSrc);
             dotSrcLines = dotSrc.split('\n');
             orgDotSrcLines = dotSrc.split('\n');
 
@@ -43,17 +43,26 @@
                     var class1 = d3.select(this).attr('class');
                     dotElement = title.replace('->', ' -> ');
                     console.log('Element id="%s" class="%s" title="%s" text="%s" dotElement="%s"', id, class1, title, text, dotElement);
-                    console.log('Finding and deleting references to %s "%s" from the DOT source', class1, dotElement);
-                    for (i = 0; i < dotSrcLines.length;) {
-                        // if (dotSrcLines[i].indexOf(dotElement) >= 0) {
-                        if (dotSrcLines[i].indexOf("yellow") >= 0) {
-                            console.log('Deleting line %d: %s', i, dotSrcLines[i]);
-                            dotSrcLines.splice(i, 1);
-                        } else {
-                            i++;
-                        }
-                    }
-                    dotSrc = dotSrcLines.join('\n');
+                    // console.log('Finding and deleting references to %s "%s" from the DOT source', class1, dotElement);
+                    // for (i = 0; i < dotSrcLines.length;) {
+                    //     // if (dotSrcLines[i].indexOf(dotElement) >= 0) {
+                    //     if (dotSrcLines[i].indexOf("yellow") >= 0) {
+                    //         console.log('Deleting line %d: %s', i, dotSrcLines[i]);
+                    //         dotSrcLines.splice(i, 1);
+                    //     } else {
+                    //         i++;
+                    //     }
+                    // }
+                    //dotSrc = dotSrcLines.join('\n');
+
+                    // Use regexp to the color of the selected node Cange from something like ' n5df7c3f1_1[ fillcolor="yellow" color="#FF5454" shape="house" peripheries="2" style="filled" label="code" ]' to ' n5df7c3f1_1[ fillcolor="red" color="#FF5454" shape="house" peripheries="2" style="filled" label="code" ]' where n5df7c3f1_1 is id
+                    //dotSrc = dotSrc.replace(/n3cb9b9c1_1\[ fillcolor="yellow"/, 'n3cb9b9c1_1[ fillcolor="red"');
+                    //dotSrc = dotSrc.replace(new RegExp('n3cb9b9c1_1\\[ fillcolor="yellow"'), 'n3cb9b9c1_1[ fillcolor="red"');
+                    dotSrc = dotSrc.replace(new RegExp(dotElement + '\\[ fillcolor="yellow"'), dotElement + '[ fillcolor="red"');
+                    //console.log('DOT source =', dotSrc);
+
+                    
+                    
                     render();
                 });
         }
